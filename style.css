@@ -1,11 +1,5 @@
-#board {
-	margin: auto;
-	width: 500px;
-	height:500px;
-	/*
-	background-image: url('images/board.jpg');
-	background-repeat: no-repeat;
-	*/
+h1 {
+	text-align: center;
 }
 
 table, tr, td{
@@ -19,6 +13,29 @@ td {
 	height: 100px;
 }
 
+#board {
+	margin: auto;
+	width: 500px;
+	height:500px;
+}
+
 #id {
 	text-align: center;
+}
+
+#player1 {
+	float:left;
+}
+
+#player2 {
+	float: right;
+}
+
+.hide {
+	visibility: hidden;
+}
+
+#result {
+	text-align: center;
+	font-size: 5em;
 }

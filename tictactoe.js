@@ -19,6 +19,12 @@ var winningCombos = [
 	[$('td').eq(6), $('td').eq(4),$('td').eq(2)]
 ]
 
+function setPiece(idx, currentPlayer) {
+	//place the new piece
+	$('td').eq(idx).html(currentPlayer);
+	currentPlayerCount++;
+};
+
 function checkWin() {
 	for(var i = 0; i < winningCombos.length; i++) {
 
@@ -36,18 +42,25 @@ function checkWin() {
 };
 
 
-function setPiece(idx, currentPlayer) {
-	$('td').eq(idx).html(currentPlayer);
-	currentPlayerCount++;
-};
 
 
 $('#board').on('click', 'td', function() {
-	//get square clicked
-	var idx = $( "td" ).index(this);
 
-	//check currentPlayer
-	currentPlayer = (currentPlayerCount%2 === 0)? player1 : player2;
-	setPiece(idx, currentPlayer);
-	checkWin();
+	//get square clicked
+	var idx = $("td").index(this);
+
+	// make sure you're not overriding an existing piece, and the game is still going
+	if ($('td').eq(idx).html() === "" && checkWin() !== true){
+
+		//check currentPlayer
+		currentPlayer = (currentPlayerCount%2 === 0)? player1 : player2;
+		setPiece(idx, currentPlayer);
+		checkWin();
+
+		//change the display to show who's turn it is
+		$('#player1').toggleClass('hide');
+		$('#player2').toggleClass('hide');
+
+	};
+
 });
