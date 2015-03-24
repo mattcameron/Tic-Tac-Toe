@@ -1,0 +1,24 @@
+#board {
+	margin: auto;
+	width: 500px;
+	height:500px;
+	/*
+	background-image: url('images/board.jpg');
+	background-repeat: no-repeat;
+	*/
+}
+
+table, tr, td{
+	border: 1px solid black;
+	font-size: 75px;
+	text-align: center;
+}
+
+td {
+	width: 100px;
+	height: 100px;
+}
+
+#id {
+	text-align: center;
+}
