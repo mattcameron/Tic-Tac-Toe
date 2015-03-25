@@ -55,6 +55,10 @@ function setPiece(square, currentPlayer) {
 	//place the new piece
 	$(square).html(currentPlayer);
 
+	//clear the timers
+	clearTimeout(timer);
+	clearTimeout(countDownTimer);
+
 	//update the display to show whose turn it is
 	showPlayerTurn();
 
@@ -69,6 +73,30 @@ function changeMove() {
 	checkCurrentPlayer();
 	currentPlayerCount++;
 	showPlayerTurn();
+
+	//clear existing timer
+	clearTimeout(countDownTimer);
+
+	//start new timer
+	startTimer();
+};
+
+var seconds = 5;
+
+function countDown() {
+	if (seconds > 0) {
+		$('#result').html(seconds);
+		seconds--;
+	} else {
+		changeMove();
+	}
+	var countDownTimer = setTimeout(countDown, 1000);
+}
+
+function startTimer() {
+	seconds = 5;
+	countDown();
+	var timer = setTimeout(changeMove, 5000);
 };
 
 function checkWin() {
@@ -161,6 +189,7 @@ $('#board td').on( {
 		if ($(this).html() === "" && !checkWin() ){
 			//get currentPlayer
 			setPiece(this, checkCurrentPlayer);
+			startTimer();
 			if (checkWin()) {updateScoreBoard()};
 			checkTie();
 		};
@@ -181,9 +210,9 @@ $('#board td').on( {
 	}
 });
 
-// player clicks clearBoard button
+// BUTTONS
+$('#startSpeedGame').on('click', startTimer);
 $('#clearBoard').on('click', clearBoard);
-
 $('#mainMenu').on('click', mainMenu);
 
 
