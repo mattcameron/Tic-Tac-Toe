@@ -122,8 +122,6 @@ function showPlayerTurn() {
 	}
 }
 
-
-
 function clearBoard() {
 	//set every square back to ""
 	$.each(board, function(index, row) {
@@ -138,6 +136,10 @@ function clearBoard() {
 	//save the cleared board to localStorage
 		saveGame();
 }
+
+function mainMenu() {
+	console.log("exit");
+};
 
 
 // actions to be taken when a square is selected
@@ -171,6 +173,8 @@ $('#board td').on( {
 
 // player clicks clearBoard button
 $('#clearBoard').on('click', clearBoard);
+
+$('#mainMenu').on('click', mainMenu);
 
 
 $(document).ready(function() {

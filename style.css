@@ -21,6 +21,12 @@ header {
 	background-color: rgba(0,0,0,.7);
 }
 
+button {
+	padding: 20px;
+	border-radius: 10px;
+	background-color: white;
+}
+
 #board {
 	margin: auto;
 	width: 500px;
@@ -65,11 +71,15 @@ header {
 
 #clearBoard {
 	position: fixed;
-	right: 50px;
+	right: 150px;
 	top: 35px;
-	padding: 20px;
-	border-radius: 10px;
-	background-color: white;
+}
+
+#mainMenu {
+	position: fixed;
+	right: 30px;
+	top: 35px;
+	width: 100px;
 }
 
 .playerScore {
