@@ -94,6 +94,7 @@ function checkTie() {
 		// if each row is full and no one has won
 		if (count === 3 && !checkWin()) {
 			$('#result').html("It's a tie!");
+			return true;
 		};
 };
 
@@ -190,7 +191,7 @@ $(document).ready(function() {
 			}
 		}
 		// also reset the board if the last game was over
-		if ( checkWin() ) {clearBoard()};
+		if ( checkWin() || checkTie() ) {clearBoard()};
 	};
 
 	//setup the display to show whose turn it is
