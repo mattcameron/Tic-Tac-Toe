@@ -46,17 +46,29 @@ function saveGame() {
 	localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer))
 };
 
+function checkCurrentPlayer() {
+	currentPlayer = (currentPlayerCount%2 === 0)? player1 : player2;
+	return currentPlayer;
+}
 
 function setPiece(square, currentPlayer) {
 	//place the new piece
 	$(square).html(currentPlayer);
-	currentPlayerCount++;
 
 	//update the display to show whose turn it is
 	showPlayerTurn();
 
+	//Change the player turn
+	changeMove();
+
 	//save the board to localStorage
 	saveGame();
+};
+
+function changeMove() {
+	checkCurrentPlayer();
+	currentPlayerCount++;
+	showPlayerTurn();
 };
 
 function checkWin() {
@@ -148,12 +160,10 @@ $('#board td').on( {
 		// make sure we're not overriding an existing piece, and the game is still going
 		if ($(this).html() === "" && !checkWin() ){
 			//get currentPlayer
-			currentPlayer = (currentPlayerCount%2 === 0)? player1 : player2;
-			setPiece(this, currentPlayer);
+			setPiece(this, checkCurrentPlayer);
 			if (checkWin()) {updateScoreBoard()};
 			checkTie();
 		};
-
 		//make the background white
 		if (!checkWin() ) {
 			$(this).css("background-color", "white");
