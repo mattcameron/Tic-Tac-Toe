@@ -34,6 +34,16 @@ function setPiece(square, currentPlayer) {
 	$(square).html(currentPlayer);
 	currentPlayerCount++;
 
+	// get the current board with pieces
+	var game = [
+		[ board[0][0].html(), board[0][1].html(), board[0][2].html() ],
+		[ board[1][0].html(), board[1][1].html(), board[1][2].html() ],
+		[ board[2][0].html(), board[2][1].html(), board[2][2].html() ]
+	];
+
+	//save the board to localStorage
+	localStorage.setItem('board', JSON.stringify(game));
+
 
 	//change the display to show whose turn it is
 		$('#player1').toggleClass('hide');
@@ -149,4 +159,17 @@ $(document).ready(function() {
 	//set score tally
 	$('#player1Wins p').html(JSON.parse(localStorage.getItem('player1Wins') ));
 	$('#player2Wins p').html(JSON.parse(localStorage.getItem('player2Wins') ));
+
+	//set up board if it exists
+	if (localStorage.getItem('board')) {
+		var storedBoard = JSON.parse(localStorage.getItem('board'));
+		for (var row=0; row < storedBoard.length; row++) {
+			for(var sq=0; sq < 3; sq++) {
+				board[row][sq].html(storedBoard[row][sq]);
+			}
+		}
+	};
+
+
+
 })
