@@ -3,8 +3,8 @@ var player2 = "O";
 var currentPlayerCount = 0;
 var currentPlayer;
 
-var player1Wins = 0;
-var player2Wins = 0;
+var player1Wins = JSON.parse(localStorage.getItem('player1Wins') );
+var player2Wins = JSON.parse(localStorage.getItem('player2Wins') );
 
 var board = [
 	[$('td').eq(0), $('td').eq(1),$('td').eq(2)],
@@ -81,6 +81,14 @@ function checkTie() {
 function updateScoreBoard() {
 	//add win to the scoreboard
 	(currentPlayer === player1)? player1Wins++ : player2Wins++;
+
+	//save the new scores to localStorage
+	console.log('Player 1: ' + player1Wins)
+	localStorage.setItem('player1Wins', player1Wins);
+	console.log('Player 2: ' + player2Wins)
+	localStorage.setItem('player2Wins', player2Wins);
+
+	// display the new score
 	$('#player1Wins p').html(player1Wins);
 	$('#player2Wins p').html(player2Wins);
 }
@@ -102,17 +110,7 @@ function clearBoard() {
 
 // actions to be taken when a square is selected
 $('#board td').on( {
- 	mouseenter: function() {
- 		if ($(this).html() === "" && !checkWin()) {
-			$(this).css("background-color", "grey");
-		}
-	},
-	mouseleave: function() {
-		if (!checkWin() ) {
-			$(this).css("background-color", "white");
-		}
-	},
-	click: function() {
+ 	click: function() {
 		// make sure we're not overriding an existing piece, and the game is still going
 		if ($(this).html() === "" && !checkWin() ){
 			//get currentPlayer
@@ -126,16 +124,29 @@ $('#board td').on( {
 		if (!checkWin() ) {
 			$(this).css("background-color", "white");
 		}
+	},
+	mouseenter: function() {
+ 		if ($(this).html() === "" && !checkWin()) {
+			$(this).css("background-color", "grey");
+		}
+	},
+	mouseleave: function() {
+		if (!checkWin() ) {
+			$(this).css("background-color", "white");
+		}
 	}
 });
-
 
 // player clicks clearBoard button
 $('#clearBoard').on('click', clearBoard);
 
 
 $(document).ready(function() {
+	//create player wins totals in localStorage if it doesn't already exist
+	if (!localStorage.getItem('player1Wins')) { localStorage.setItem('player1Wins', 0) };
+	if (!localStorage.getItem('player2Wins')) { localStorage.setItem('player2Wins', 0) };
+
 	//set score tally
-	$('#player1Wins p').html(player1Wins);
-	$('#player2Wins p').html(player2Wins);
+	$('#player1Wins p').html(JSON.parse(localStorage.getItem('player1Wins') ));
+	$('#player2Wins p').html(JSON.parse(localStorage.getItem('player2Wins') ));
 })
