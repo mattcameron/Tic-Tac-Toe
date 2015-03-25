@@ -1,7 +1,7 @@
 var player1 = "X";
 var player2 = "O";
-var currentPlayerCount = 0;
-var currentPlayer;
+var currentPlayerCount = JSON.parse(localStorage.getItem('currentPlayerCount') || 0);
+var currentPlayer = JSON.parse(localStorage.getItem('currentPlayer') || 0);
 
 var player1Wins = JSON.parse(localStorage.getItem('player1Wins') );
 var player2Wins = JSON.parse(localStorage.getItem('player2Wins') );
@@ -28,12 +28,7 @@ var winningCombos = [
 	[$('td').eq(6), $('td').eq(4),$('td').eq(2)]
 ];
 
-
-function setPiece(square, currentPlayer) {
-	//place the new piece
-	$(square).html(currentPlayer);
-	currentPlayerCount++;
-
+function saveGame() {
 	// get the current board with pieces
 	var game = [
 		[ board[0][0].html(), board[0][1].html(), board[0][2].html() ],
@@ -44,10 +39,24 @@ function setPiece(square, currentPlayer) {
 	//save the board to localStorage
 	localStorage.setItem('board', JSON.stringify(game));
 
+	//save the currentPlayerCount so the correct person starts on load
+	localStorage.setItem('currentPlayerCount', JSON.stringify(currentPlayerCount) );
 
-	//change the display to show whose turn it is
-		$('#player1').toggleClass('hide');
-		$('#player2').toggleClass('hide');
+	//save currentPlayer
+	localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer))
+};
+
+
+function setPiece(square, currentPlayer) {
+	//place the new piece
+	$(square).html(currentPlayer);
+	currentPlayerCount++;
+
+	//update the display to show whose turn it is
+	showPlayerTurn();
+
+	//save the board to localStorage
+	saveGame();
 };
 
 function checkWin() {
@@ -93,14 +102,23 @@ function updateScoreBoard() {
 	(currentPlayer === player1)? player1Wins++ : player2Wins++;
 
 	//save the new scores to localStorage
-	console.log('Player 1: ' + player1Wins)
 	localStorage.setItem('player1Wins', player1Wins);
-	console.log('Player 2: ' + player2Wins)
 	localStorage.setItem('player2Wins', player2Wins);
 
 	// display the new score
 	$('#player1Wins p').html(player1Wins);
 	$('#player2Wins p').html(player2Wins);
+}
+
+function showPlayerTurn() {
+	//update the display to show whose turn it is
+	if (currentPlayer === player1) {
+		$('#player1').css("visibility", "hidden");
+		$('#player2').css("visibility", "visible");
+	} else {
+		$('#player1').css("visibility", "visible");
+		$('#player2').css("visibility", "hidden");
+	}
 }
 
 
@@ -115,6 +133,9 @@ function clearBoard() {
 
 	//reset Game Over message
 	$("#result").html("");
+
+	//save the cleared board to localStorage
+		saveGame();
 }
 
 
@@ -168,8 +189,12 @@ $(document).ready(function() {
 				board[row][sq].html(storedBoard[row][sq]);
 			}
 		}
+		// also reset the board if the last game was over
+		if ( checkWin() ) {clearBoard()};
 	};
 
+	//setup the display to show whose turn it is
+	showPlayerTurn();
 
 
 })

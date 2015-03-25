@@ -34,11 +34,13 @@ header {
 #player1 {
 	float:left;
 	margin-left: 50px;
+	visibility: hidden;
 }
 
 #player2 {
 	float: right;
 	margin-right: 50px;
+	visibility: hidden;
 }
 
 #result {
