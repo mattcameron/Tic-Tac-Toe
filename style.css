@@ -1,3 +1,7 @@
+body {
+	margin:0;
+}
+
 h1 {
 	text-align: center;
 }
@@ -11,6 +15,10 @@ table, tr, td{
 td {
 	width: 100px;
 	height: 100px;
+}
+
+header {
+	background-color: rgba(0,0,0,.7);
 }
 
 #board {
@@ -37,5 +45,27 @@ td {
 
 #result {
 	text-align: center;
-	font-size: 5em;
+	font-size: 2em;
+	line-height: 2em;
+	color:red;
+	height:2em;
 }
+
+#scoreboard {
+	margin: auto;
+	width: 600px;
+	text-align: center;
+	color: white;
+}
+
+#scoreboardTitle {
+	line-height: 2em;
+	text-decoration: underline;
+}
+
+.playerScore {
+	display: inline-block;
+	width: 200px;
+	font-size: 1.4em;
+}
+
