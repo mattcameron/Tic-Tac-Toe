@@ -3,8 +3,8 @@ var player2 = "O";
 var currentPlayerCount = JSON.parse(localStorage.getItem('currentPlayerCount') || 0);
 var currentPlayer = JSON.parse(localStorage.getItem('currentPlayer') || 0);
 
-var player1Wins = JSON.parse(localStorage.getItem('player1Wins') );
-var player2Wins = JSON.parse(localStorage.getItem('player2Wins') );
+var player1Wins = JSON.parse(localStorage.getItem('player1Wins') || 0);
+var player2Wins = JSON.parse(localStorage.getItem('player2Wins') || 0);
 
 var board = [
 	[$('td').eq(0), $('td').eq(1),$('td').eq(2)],
