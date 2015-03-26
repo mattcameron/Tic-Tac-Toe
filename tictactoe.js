@@ -124,7 +124,6 @@ function checkTie() {
 		});
 		// if each row is full and no one has won
 		if (count === 3 && !checkWin()) {
-			$('#result').removeClass('hide').html("It's a tie!");
 			return true;
 		};
 };
@@ -168,11 +167,22 @@ function clearBoard() {
 		saveGame();
 }
 
+function isBoardBlank() {
+	var count = 0;
+	$.each(board, function(index, row) {
+			if (!row[0].html() === "") {count++};
+			if (!row[1].html() === "") {count++};
+			if (!row[2].html() === "") {count++};
+		});
+	return (count === 0)? true : false;
+};
+
 
 function showButtons() {
 	$('#mainMenuButton').toggleClass('hide');
 	$('#clearBoard').toggleClass('hide');
 	$('#mainMenu').toggleClass('hide');
+	clearInterval(countDownTimer);
 }
 
 // actions to be taken when a square is selected
@@ -185,12 +195,18 @@ $('#board td').on( {
 			setPiece(this, checkCurrentPlayer);
 
 			//return if the game is now over or tied after setting the new piece
-			if( checkWin() ||	checkTie() ) {
+			if (checkWin()) {
 				$('#result').removeClass('hide').html("GAME OVER ");
 				clearInterval(countDownTimer);
 				updateScoreBoard();
 				return;
 			};
+
+			if (checkTie()) {
+				$('#result').removeClass('hide').html("It's a tie!");
+				clearInterval(countDownTimer);
+				updateScoreBoard();
+			}
 
 			//start timer if it's a speedGame
 			if (speedGame) {
@@ -213,16 +229,16 @@ $('#board td').on( {
 		}
 	},
 	mouseenter: function() {
-		if (checkWin() === undefined) {
+		if (!checkWin()) {
 	 		if ($(this).html() === "" && !checkWin()) {
 				$(this).css("background-color", "rgba(23, 213, 142, 0.9)");
 			};
-		} else {return};
+		}
 	},
 	mouseleave: function() {
-		if (checkWin() === undefined) {
+		if (!checkWin()) {
 			($(this).html() === "")? $(this).css("background-color", "rgba(255, 255, 255,0.6)") : $(this).css("background-color", "white");
-		} else {return};
+		}
 	}
 });
 
@@ -248,6 +264,9 @@ $('#blindGame').on('click', function() {
 
 $('#clearBoard').on('click', clearBoard);
 $('#mainMenuButton').on('click', showButtons);
+$('#resumeGame').on('click', function() {
+	showButtons();
+});
 
 
 $(document).ready(function() {
@@ -265,11 +284,25 @@ $(document).ready(function() {
 		for (var row=0; row < storedBoard.length; row++) {
 			for(var sq=0; sq < 3; sq++) {
 				board[row][sq].html(storedBoard[row][sq]);
-			}
-		}
+				if (board[row][sq].html() !== "") {
+					board[row][sq].css("background-color", "white");
+				};
+			};
+		};
 		// also reset the board if the last game was over
-		if ( checkWin() || checkTie() ) {clearBoard()};
+		if ( checkWin() || checkTie() || isBoardBlank()) {
+			clearBoard();
+			$('#resume').hide();
+		} else {
+			//otherwise give the user the option to resume
+			$('#resume').show();
+		}
+
+	} else {
+		$('#resume').hide();
 	};
+
+
 
 	//setup the display to show whose turn it is
 	showPlayerTurn();
