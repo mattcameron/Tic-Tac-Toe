@@ -211,7 +211,7 @@ $('#board td').on( {
 // BUTTONS
 //$('#startSpeedGame').on('click', startTimer);
 $('#clearBoard').on('click', clearBoard);
-$('#mainMenu').on('click', mainMenu);
+$('#mainMenuButton').on('click', mainMenu);
 
 
 $(document).ready(function() {

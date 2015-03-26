@@ -69,6 +69,26 @@ button {
 	text-decoration: underline;
 }
 
+#mainMenu {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0,0,200,.9);
+	text-align: center;
+}
+
+#mainMenu button {
+	display: block;
+	margin: 20px auto;
+}
+
+.container {
+	width: 50%;
+	margin:auto;
+	margin-top: 20%;
+}
+
+
 #startSpeedGame {
 	position: fixed;
 	right: 240px;
@@ -81,7 +101,7 @@ button {
 	top: 35px;
 }
 
-#mainMenu {
+#mainMenuButton {
 	position: fixed;
 	right: 10px;
 	top: 35px;
