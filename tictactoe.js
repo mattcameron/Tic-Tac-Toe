@@ -55,10 +55,6 @@ function setPiece(square, currentPlayer) {
 	//place the new piece
 	$(square).html(currentPlayer);
 
-	//clear the timers
-	clearTimeout(timer);
-	clearTimeout(countDownTimer);
-
 	//update the display to show whose turn it is
 	showPlayerTurn();
 
@@ -73,12 +69,6 @@ function changeMove() {
 	checkCurrentPlayer();
 	currentPlayerCount++;
 	showPlayerTurn();
-
-	//clear existing timer
-	clearTimeout(countDownTimer);
-
-	//start new timer
-	startTimer();
 };
 
 var seconds = 5;
@@ -88,16 +78,9 @@ function countDown() {
 		$('#result').html(seconds);
 		seconds--;
 	} else {
-		changeMove();
+		$('#result').html("Too Slow!")
 	}
-	var countDownTimer = setTimeout(countDown, 1000);
 }
-
-function startTimer() {
-	seconds = 5;
-	countDown();
-	var timer = setTimeout(changeMove, 5000);
-};
 
 function checkWin() {
 	for(var i = 0; i < winningCombos.length; i++) {
@@ -182,6 +165,8 @@ function mainMenu() {
 };
 
 
+var countDownTimer;
+
 // actions to be taken when a square is selected
 $('#board td').on( {
  	click: function() {
@@ -189,9 +174,19 @@ $('#board td').on( {
 		if ($(this).html() === "" && !checkWin() ){
 			//get currentPlayer
 			setPiece(this, checkCurrentPlayer);
-			startTimer();
 			if (checkWin()) {updateScoreBoard()};
 			checkTie();
+
+			//clear any old timer
+			if(countDownTimer >= 1) {
+				clearInterval(countDownTimer);
+			}
+			//set new interval for countdown timer
+				seconds = 5;
+				//call once to fire immediately
+				countDown();
+				countDownTimer = setInterval(countDown, 1000);
+
 		};
 		//make the background white
 		if (!checkWin() ) {
@@ -211,7 +206,7 @@ $('#board td').on( {
 });
 
 // BUTTONS
-$('#startSpeedGame').on('click', startTimer);
+//$('#startSpeedGame').on('click', startTimer);
 $('#clearBoard').on('click', clearBoard);
 $('#mainMenu').on('click', mainMenu);
 
