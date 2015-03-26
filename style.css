@@ -82,13 +82,6 @@ button {
 	margin: 20px auto;
 }
 
-.container {
-	width: 50%;
-	margin:auto;
-	margin-top: 20%;
-}
-
-
 #startSpeedGame {
 	position: fixed;
 	right: 240px;
@@ -116,4 +109,10 @@ button {
 
 .hide {
 	visibility: hidden;
+}
+
+.container {
+	width: 50%;
+	margin:auto;
+	margin-top: 20%;
 }

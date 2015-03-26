@@ -1,9 +1,17 @@
+//game types
+var speedGame;
+var blindGame;
+
 var player1 = "X";
 var player2 = "O";
+
+//speedGame stuff
 var timeLimit = 3;
+var countDownTimer;
+
+//load stuff from localStorage if it exists, otherwise set to 0
 var currentPlayerCount = JSON.parse(localStorage.getItem('currentPlayerCount') || 0);
 var currentPlayer = JSON.parse(localStorage.getItem('currentPlayer') || 0);
-
 var player1Wins = JSON.parse(localStorage.getItem('player1Wins') || 0);
 var player2Wins = JSON.parse(localStorage.getItem('player2Wins') || 0);
 
@@ -161,12 +169,11 @@ function clearBoard() {
 		saveGame();
 }
 
-function mainMenu() {
-	console.log("exit");
+function showMainMenu() {
+	$('#mainMenu').toggleClass('hide');
+	clearBoard();
 };
 
-
-var countDownTimer;
 
 // actions to be taken when a square is selected
 $('#board td').on( {
@@ -176,19 +183,22 @@ $('#board td').on( {
 			//get currentPlayer
 			setPiece(this, checkCurrentPlayer);
 			if (checkWin()) {updateScoreBoard()};
-			checkTie();
 
-			//clear timer if one is already running
-			if(countDownTimer >= 1 ) {
-				clearInterval(countDownTimer);
-			}
-			//set new interval for countdown timer if game is still going
+			//add timer function if it's a speedGame
+			if (speedGame) {
+				//clear timer if one is already running
+				if(countDownTimer >= 1 ) {
+					clearInterval(countDownTimer);
+				}
+				checkTie();
 
-			if (!checkWin()) {
-				timeLimit = 3;
-				//call once to fire immediately
-				countDown();
-				countDownTimer = setInterval(countDown, 1000);
+				//set new interval for countdown timer if game is still going
+				if (!checkWin() && !checkTie() ) {
+					timeLimit = 3;
+					//call once to fire immediately
+					countDown();
+					countDownTimer = setInterval(countDown, 1000);
+				};
 			};
 		};
 		//make the background white
@@ -209,9 +219,25 @@ $('#board td').on( {
 });
 
 // BUTTONS
-//$('#startSpeedGame').on('click', startTimer);
+$('#regularGame').on('click', function() {
+	speedGame = false;
+	blindGame = false;
+	showMainMenu();
+})
+
+$('#speedGame').on('click', function() {
+	speedGame = true;
+	blindGame = false;
+	showMainMenu();
+});
+$('#blindGame').on('click', function() {
+	speedGame = false;
+	blindGame = true;
+	showMainMenu();
+});
+
 $('#clearBoard').on('click', clearBoard);
-$('#mainMenuButton').on('click', mainMenu);
+$('#mainMenuButton').on('click', showMainMenu);
 
 
 $(document).ready(function() {
