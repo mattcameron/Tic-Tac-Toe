@@ -1,5 +1,6 @@
 var player1 = "X";
 var player2 = "O";
+var timeLimit = 3;
 var currentPlayerCount = JSON.parse(localStorage.getItem('currentPlayerCount') || 0);
 var currentPlayer = JSON.parse(localStorage.getItem('currentPlayer') || 0);
 
@@ -71,16 +72,14 @@ function changeMove() {
 	showPlayerTurn();
 };
 
-var seconds = 5;
-
 function countDown() {
-	if (seconds > 0) {
-		$('#result').html(seconds);
-		seconds--;
+	if (timeLimit > 0) {
+		$('#result').html(timeLimit);
+		timeLimit--;
 	} else {
 		$('#result').html("Too Slow!");
 		changeMove();
-		seconds = 5;
+		timeLimit = 3;
 	}
 }
 
@@ -186,7 +185,7 @@ $('#board td').on( {
 			//set new interval for countdown timer if game is still going
 
 			if (!checkWin()) {
-				seconds = 5;
+				timeLimit = 3;
 				//call once to fire immediately
 				countDown();
 				countDownTimer = setInterval(countDown, 1000);
