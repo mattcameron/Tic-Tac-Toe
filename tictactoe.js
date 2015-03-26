@@ -273,14 +273,14 @@ $('#board td').on( {
 		if (vsComputer) {computerMove()};
 	},
 	mouseenter: function() {
-		if (won !== true) {
+		if (checkWin() !== true) {
 	 		if ($(this).html() === "" && won !== true) {
 				$(this).css("background-color", "rgba(23, 213, 142, 0.9)");
 			};
 		}
 	},
 	mouseleave: function() {
-		if (won !== true) {
+		if (checkWin() !== true) {
 			($(this).html() === "")? $(this).css("background-color", "rgba(255, 255, 255,0.6)") : $(this).css("background-color", "white");
 		}
 	}
@@ -292,7 +292,7 @@ $('#regularGame').on('click', function() {
 	vsComputer = false;
 	clearBoard();
 	showButtons();
-})
+});
 
 $('#speedGame').on('click', function() {
 	speedGame = true;
@@ -311,13 +311,11 @@ $('#vsComputer').on('click', function() {
 
 });
 
-
 $('#clearBoard').on('click', clearBoard);
 $('#mainMenuButton').on('click', showButtons);
 $('#resumeGame').on('click', function() {
 	showButtons();
 });
-
 
 
 $(document).ready(function() {
@@ -353,10 +351,7 @@ $(document).ready(function() {
 		$('#resume').hide();
 	};
 
-
-
 	//setup the display to show whose turn it is
 	showPlayerTurn();
-
 
 })
