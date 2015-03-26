@@ -82,10 +82,10 @@ function changeMove() {
 
 function countDown() {
 	if (timeLimit > 0) {
-		$('#result').html(timeLimit);
+		$('#result').removeClass('hide').html(timeLimit);
 		timeLimit--;
 	} else {
-		$('#result').html("Too Slow!");
+		$('#result').removeClass('hide').html("Too Slow!");
 		changeMove();
 		timeLimit = 3;
 	}
@@ -101,12 +101,11 @@ function checkWin() {
 		if(winningCombos[i][0].html() === "") {return};
 
 		//change color of winning squares
-			winningCombos[i][0].css("background-color", "green");
-			winningCombos[i][1].css("background-color", "green");
-			winningCombos[i][2].css("background-color", "green");
+			winningCombos[i][0].css("background-color", "rgb(55, 247, 184)");
+			winningCombos[i][1].css("background-color", "rgb(55, 247, 184)");
+			winningCombos[i][2].css("background-color", "rgb(55, 247, 184)");
 
 			// someone has won
-			$('#result').html("GAME OVER ");
 			return true;
 		}
 	}
@@ -125,7 +124,7 @@ function checkTie() {
 		});
 		// if each row is full and no one has won
 		if (count === 3 && !checkWin()) {
-			$('#result').html("It's a tie!");
+			$('#result').removeClass('hide').html("It's a tie!");
 			return true;
 		};
 };
@@ -157,41 +156,48 @@ function showPlayerTurn() {
 function clearBoard() {
 	//set every square back to ""
 	$.each(board, function(index, row) {
-			row[0].css("background-color","white").html("");
-			row[1].css("background-color","white").html("");
-			row[2].css("background-color","white").html("");
+			row[0].css("background-color","rgba(255, 255, 255,0.6)").html("");
+			row[1].css("background-color","rgba(255, 255, 255,0.6)").html("");
+			row[2].css("background-color","rgba(255, 255, 255,0.6)").html("");
 		});
 
 	//reset Game Over message
-	$("#result").html("");
+	$("#result").addClass('hide').html("");
 
 	//save the cleared board to localStorage
 		saveGame();
 }
 
-function showMainMenu() {
-	$('#mainMenu').toggleClass('hide');
-	clearBoard();
-};
 
+function showButtons() {
+	$('#mainMenuButton').toggleClass('hide');
+	$('#clearBoard').toggleClass('hide');
+	$('#mainMenu').toggleClass('hide');
+}
 
 // actions to be taken when a square is selected
 $('#board td').on( {
  	click: function() {
 		// make sure we're not overriding an existing piece, and the game is still going
 		if ($(this).html() === "" && !checkWin() ){
-			//get currentPlayer
-			setPiece(this, checkCurrentPlayer);
-			if (checkWin()) {updateScoreBoard()};
 
-			//add timer function if it's a speedGame
+			//set the new piece
+			setPiece(this, checkCurrentPlayer);
+
+			//return if the game is now over or tied after setting the new piece
+			if( checkWin() ||	checkTie() ) {
+				$('#result').removeClass('hide').html("GAME OVER ");
+				clearInterval(countDownTimer);
+				updateScoreBoard();
+				return;
+			};
+
+			//start timer if it's a speedGame
 			if (speedGame) {
-				//clear timer if one is already running
+				//clear timer first if one is already running
 				if(countDownTimer >= 1 ) {
 					clearInterval(countDownTimer);
 				}
-				checkTie();
-
 				//set new interval for countdown timer if game is still going
 				if (!checkWin() && !checkTie() ) {
 					timeLimit = 3;
@@ -201,20 +207,22 @@ $('#board td').on( {
 				};
 			};
 		};
-		//make the background white
+		//reset the background color
 		if (!checkWin() ) {
 			$(this).css("background-color", "white");
 		}
 	},
 	mouseenter: function() {
- 		if ($(this).html() === "" && !checkWin()) {
-			$(this).css("background-color", "grey");
-		}
+		if (checkWin() === undefined) {
+	 		if ($(this).html() === "" && !checkWin()) {
+				$(this).css("background-color", "rgba(23, 213, 142, 0.9)");
+			};
+		} else {return};
 	},
 	mouseleave: function() {
-		if (!checkWin() ) {
-			$(this).css("background-color", "white");
-		}
+		if (checkWin() === undefined) {
+			($(this).html() === "")? $(this).css("background-color", "rgba(255, 255, 255,0.6)") : $(this).css("background-color", "white");
+		} else {return};
 	}
 });
 
@@ -222,22 +230,24 @@ $('#board td').on( {
 $('#regularGame').on('click', function() {
 	speedGame = false;
 	blindGame = false;
-	showMainMenu();
+	clearBoard();
+	showButtons();
 })
 
 $('#speedGame').on('click', function() {
 	speedGame = true;
 	blindGame = false;
-	showMainMenu();
+	clearBoard();
+	showButtons();
 });
 $('#blindGame').on('click', function() {
 	speedGame = false;
 	blindGame = true;
-	showMainMenu();
+	clearBoard();
 });
 
 $('#clearBoard').on('click', clearBoard);
-$('#mainMenuButton').on('click', showMainMenu);
+$('#mainMenuButton').on('click', showButtons);
 
 
 $(document).ready(function() {

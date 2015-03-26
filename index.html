@@ -8,11 +8,12 @@
 <body>
 
 <div id="mainMenu">
+	<h1>Tic Tac Toe</h1>
 	<div class="container">
 		Choose a game type:
 		<button id="regularGame">Regular Tic Tac Toe</button>
 		<button id="speedGame">Speed Tic Tac Toe</button>
-		<button id="blindGame">Blind Tic Tac Toe</button>
+		<!-- leave out for now <button id="blindGame">Blind Tic Tac Toe</button> -->
 	</div>
 </div>
 
@@ -30,11 +31,11 @@
 				</div>
 			</div>
 		</div>
-		<button id="startSpeedGame">Start Speed Game</button>
-		<button id="clearBoard">Reset Board</button>
-		<button id="mainMenuButton">Exit</button>
+		<button id="clearBoard" class="hide">Reset Board</button>
+		<button id="mainMenuButton" class="hide">Exit</button>
 	</header>
-	<div id="result"></div>
+
+	<div id="result" class="hide"></div>
 	<h2 id="player1">X, your turn</h2>
 	<h2 id="player2">O, your turn</h2>
 
