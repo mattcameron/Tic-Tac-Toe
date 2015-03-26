@@ -4,6 +4,7 @@ var blindGame;
 
 var player1 = "X";
 var player2 = "O";
+var won = false;
 
 //speedGame stuff
 var timeLimit = 3;
@@ -95,21 +96,17 @@ function checkWin() {
 	for(var i = 0; i < winningCombos.length; i++) {
 
 		// check each winning combo
-		if (winningCombos[i][0].html() == winningCombos[i][1].html() && winningCombos[i][0].html() == winningCombos[i][2].html()) {
+		if (winningCombos[i][0].html() == winningCombos[i][1].html() && winningCombos[i][0].html() == winningCombos[i][2].html() ) {
 
-			//exclude blanks
-		if(winningCombos[i][0].html() === "") {return};
-
-		//change color of winning squares
-			winningCombos[i][0].css("background-color", "rgb(55, 247, 184)");
-			winningCombos[i][1].css("background-color", "rgb(55, 247, 184)");
-			winningCombos[i][2].css("background-color", "rgb(55, 247, 184)");
-
-			// someone has won
-			return true;
-		}
-	}
-	return false;
+			// someone has won, but make sure it's not 3 blanks
+			if(winningCombos[i][0].html() !== "") {
+				//change color of winning squares
+				winningCombos[i][0].css("background-color", "rgb(55, 247, 184)");
+				winningCombos[i][1].css("background-color", "rgb(55, 247, 184)");
+				winningCombos[i][2].css("background-color", "rgb(55, 247, 184)");
+				return true};
+		};
+	};
 };
 
 function checkTie() {
@@ -163,6 +160,9 @@ function clearBoard() {
 	//reset Game Over message
 	$("#result").addClass('hide').html("");
 
+	//clear the countdown if it's running
+	clearInterval(countDownTimer);
+
 	//save the cleared board to localStorage
 		saveGame();
 }
@@ -170,9 +170,9 @@ function clearBoard() {
 function isBoardBlank() {
 	var count = 0;
 	$.each(board, function(index, row) {
-			if (!row[0].html() === "") {count++};
-			if (!row[1].html() === "") {count++};
-			if (!row[2].html() === "") {count++};
+			if (row[0].html() !== "") {count++};
+			if (row[1].html() !== "") {count++};
+			if (row[2].html() !== "") {count++};
 		});
 	return (count === 0)? true : false;
 };
@@ -195,7 +195,8 @@ $('#board td').on( {
 			setPiece(this, checkCurrentPlayer);
 
 			//return if the game is now over or tied after setting the new piece
-			if (checkWin()) {
+			won = checkWin();
+			if (won) {
 				$('#result').removeClass('hide').html("GAME OVER ");
 				clearInterval(countDownTimer);
 				updateScoreBoard();
@@ -215,7 +216,7 @@ $('#board td').on( {
 					clearInterval(countDownTimer);
 				}
 				//set new interval for countdown timer if game is still going
-				if (!checkWin() && !checkTie() ) {
+				if (!won && !checkTie() ) {
 					timeLimit = 3;
 					//call once to fire immediately
 					countDown();
@@ -224,19 +225,19 @@ $('#board td').on( {
 			};
 		};
 		//reset the background color
-		if (!checkWin() ) {
+		if (!won ) {
 			$(this).css("background-color", "white");
 		}
 	},
 	mouseenter: function() {
-		if (!checkWin()) {
-	 		if ($(this).html() === "" && !checkWin()) {
+		if (won !== true) {
+	 		if ($(this).html() === "" && won !== true) {
 				$(this).css("background-color", "rgba(23, 213, 142, 0.9)");
 			};
 		}
 	},
 	mouseleave: function() {
-		if (!checkWin()) {
+		if (won !== true) {
 			($(this).html() === "")? $(this).css("background-color", "rgba(255, 255, 255,0.6)") : $(this).css("background-color", "white");
 		}
 	}

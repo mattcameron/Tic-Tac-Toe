@@ -4,6 +4,7 @@ body {
 	background-size: cover;
 	background-color: black;
 	color: white;
+	font-family: 'Pacifico', cursive;
 }
 
 h1 {
@@ -24,19 +25,24 @@ table, tr, td{
 }
 
 td {
-	width: 150px;
-	height: 150px;
+	width: 140px;
+	height: 140px;
 	background-color: rgba(255, 255, 255, 0.6);
 }
 
 header {
 	background-color: rgba(0,0,0,.7);
+	max-height: 140px;
 }
 
 button {
 	padding: 20px;
 	border-radius: 10px;
 	background-color: white;
+}
+
+hr {
+	display: inline-block;
 }
 
 #board {
@@ -53,7 +59,7 @@ button {
 	float:left;
 	color: black;
 	padding: 30px;
-	margin-left: 50px;
+	margin-left: 250px;
 	background-color: white;
 	border-radius: 10px;
 	visibility: hidden;
@@ -63,7 +69,7 @@ button {
 	float: right;
 	color: black;
 	padding: 30px;
-	margin-right: 50px;
+	margin-right: 250px;
 	background-color: white;
 	border-radius: 10px;
 	visibility: hidden;
@@ -73,7 +79,7 @@ button {
 	text-align: center;
 	font-size: 1.5em;
 	line-height: 1.5em;
-	color:red;
+	color:black;
 	height:1.5em;
 	padding:10px;
 	background-color: white;
@@ -110,28 +116,27 @@ button {
 
 #clearBoard {
 	position: fixed;
-	right: 120px;
+	right: 200px;
 	top: 35px;
+	width: 150px;
 }
 
 #mainMenuButton {
 	position: fixed;
-	right: 10px;
+	right: 30px;
 	top: 35px;
-	width: 100px;
-}
-
-#or {
-	font-size: 2em;
-	color: black;
-	margin: 0;
-	font-weight: bold;
+	width: 150px;
 }
 
 .playerScore {
 	display: inline-block;
 	width: 200px;
-	font-size: 1.3em;
+	font-size: 2em;
+}
+
+.playerScore p {
+	margin: 0 0 20px 0;
+	font-size: 1em;
 }
 
 .hide {
@@ -150,4 +155,59 @@ button {
 
 .container h2 {
 	font-size: 1.5em;
+}
+
+
+/*######################## Button CSS ###############################*/
+.animate
+{
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
+}
+
+.action-button
+{
+	padding: 10px 40px;
+  margin: 0px 10px 10px 0px;
+	border-radius: 10px;
+	font-family: 'Pacifico', cursive;
+	font-size: 25px;
+	color: #FFF;
+	text-decoration: none;
+	width: 200px;
+}
+
+.blue
+{
+	background-color: #3498DB;
+	border-bottom: 5px solid #2980B9;
+	text-shadow: 0px -2px #2980B9;
+}
+
+.red
+{
+	background-color: #E74C3C;
+	border-bottom: 5px solid #BD3E31;
+	text-shadow: 0px -2px #BD3E31;
+}
+
+.green
+{
+	background-color: #82BF56;
+	border-bottom: 5px solid #669644;
+	text-shadow: 0px -2px #669644;
+}
+
+.yellow
+{
+	background-color: #F2CF66;
+	border-bottom: 5px solid #D1B358;
+	text-shadow: 0px -2px #D1B358;
+}
+
+.action-button:active
+{
+	transform: translate(0px,5px);
+  -webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
 }

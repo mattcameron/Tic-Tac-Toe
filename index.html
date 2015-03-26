@@ -12,13 +12,13 @@
 	<div id="resume" class="container">
 		<p>You left in the middle of a game.</p>
 		<p class="small">Would you like to resume?</p>
-		<button id="resumeGame">Resume game</button>
+		<button id="resumeGame" class="action-button animate yellow">Resume</button>
 		<p>or</p>
 	</div>
 	<div class="container">
 		<h2>Choose a game type:</h2>
-		<button id="regularGame">Regular Tic Tac Toe</button>
-		<button id="speedGame">Speed Tic Tac Toe</button>
+		<button id="regularGame" class="action-button animate blue">Regular</button>
+		<button id="speedGame" class="action-button animate green">Speed</button>
 		<!-- leave out for now <button id="blindGame">Blind Tic Tac Toe</button> -->
 	</div>
 </div>
@@ -28,17 +28,18 @@
 			<div id="scoreboardTitle">Scoreboard</div>
 			<div>
 				<div id="player1Wins" class="playerScore">
-					X wins:
+					X
 					<p>0</p>
 				</div>
+				<hr width="1" size="60">
 				<div id="player2Wins" class="playerScore">
-					O wins:
+					O
 					<p>0</p>
 				</div>
 			</div>
 		</div>
-		<button id="clearBoard" class="hide">Reset Board</button>
-		<button id="mainMenuButton" class="hide">Exit</button>
+		<button id="clearBoard" class="hide action-button animate yellow">Reset</button>
+		<button id="mainMenuButton" class="hide action-button animate red">Exit</button>
 	</header>
 
 	<div id="result" class="hide"></div>
