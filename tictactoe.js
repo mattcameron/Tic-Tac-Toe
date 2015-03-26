@@ -228,7 +228,7 @@ $('#board td').on( {
 		if ($(this).html() === "" && !checkWin() ){
 
 			//set the new piece
-			if(vsComputer) {
+			if(vsComputer === true) {
 				setPiece(this, player1);
 			} else {
 				setPiece(this, checkCurrentPlayer);
@@ -250,7 +250,7 @@ $('#board td').on( {
 			}
 
 			//start timer if it's a speedGame
-			if (speedGame) {
+			if (speedGame === true) {
 				//clear timer first if one is already running
 				if(countDownTimer >= 1 ) {
 					clearInterval(countDownTimer);
@@ -270,7 +270,7 @@ $('#board td').on( {
 		};
 
 		//if playing vsComputer, make the computer's move
-		if (vsComputer) {computerMove()};
+		if (vsComputer === true) {computerMove()};
 	},
 	mouseenter: function() {
 		if (checkWin() !== true) {
@@ -290,6 +290,10 @@ $('#board td').on( {
 $('#regularGame').on('click', function() {
 	speedGame = false;
 	vsComputer = false;
+	//store this in localStorage
+	localStorage.setItem('speedGame', false);
+	localStorage.setItem('vsComputer', false);
+
 	clearBoard();
 	showButtons();
 });
@@ -297,12 +301,17 @@ $('#regularGame').on('click', function() {
 $('#speedGame').on('click', function() {
 	speedGame = true;
 	vsComputer = false;
+	//store this in localStorage
+	localStorage.setItem('speedGame', true);
+	localStorage.setItem('vsComputer', false);
 	clearBoard();
 	showButtons();
 });
 $('#vsComputer').on('click', function() {
 	speedGame = false;
 	vsComputer = true;
+	localStorage.setItem('speedGame', false);
+	localStorage.setItem('vsComputer', true);
 	clearBoard();
 	showButtons();
 	currentPlayerCount = 1;
@@ -337,6 +346,8 @@ $(document).ready(function() {
 					board[row][sq].css("background-color", "white");
 				};
 			};
+			speedGame = JSON.parse(localStorage.getItem('speedGame'));
+			vsComputer = JSON.parse(localStorage.getItem('vsComputer'));
 		};
 		// also reset the board if the last game was over
 		if ( checkWin() || checkTie() || isBoardBlank()) {
