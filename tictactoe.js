@@ -1,6 +1,7 @@
 //game types
 var speedGame;
 var blindGame;
+var vsComputer;
 
 var player1 = "X";
 var player2 = "O";
@@ -65,9 +66,6 @@ function setPiece(square, currentPlayer) {
 	//place the new piece
 	$(square).html(currentPlayer);
 
-	//update the display to show whose turn it is
-	showPlayerTurn();
-
 	//Change the player turn
 	changeMove();
 
@@ -104,23 +102,18 @@ function checkWin() {
 				winningCombos[i][0].css("background-color", "rgb(55, 247, 184)");
 				winningCombos[i][1].css("background-color", "rgb(55, 247, 184)");
 				winningCombos[i][2].css("background-color", "rgb(55, 247, 184)");
+				$('#player1').css("visibility", "hidden");
+				$('#player2').css("visibility", "hidden");
 				return true};
 		};
 	};
 };
 
 function checkTie() {
-		var count = 0;
-
-		//check each row
-		$.each(board, function(index, row) {
-			//see if any squares in that row are blank
-			if (row[0].html() !== "" && row[1].html() !== "" && row[2].html() !== ""){
-				count++;
-			};
-		});
 		// if each row is full and no one has won
-		if (count === 3 && !checkWin()) {
+		if (isBoardFull() && !checkWin()) {
+			$('#player1').css("visibility", "hidden");
+			$('#player2').css("visibility", "hidden");
 			return true;
 		};
 };
@@ -165,6 +158,13 @@ function clearBoard() {
 
 	//save the cleared board to localStorage
 		saveGame();
+
+	//if vs computer, reset to player 1's turn
+	if(vsComputer) {
+		currentPlayerCount = 1;
+		checkCurrentPlayer();
+		showPlayerTurn();
+	}
 }
 
 function isBoardBlank() {
@@ -177,13 +177,49 @@ function isBoardBlank() {
 	return (count === 0)? true : false;
 };
 
+function isBoardFull() {
+	var count = 0;
+		//check each row
+		$.each(board, function(index, row) {
+			//see if any squares in that row are blank
+			if (row[0].html() !== "" && row[1].html() !== "" && row[2].html() !== ""){
+				count++;
+			};
+		});
+
+		if (count === 3) {
+			return true;
+		};
+};
 
 function showButtons() {
 	$('#mainMenuButton').toggleClass('hide');
 	$('#clearBoard').toggleClass('hide');
 	$('#mainMenu').toggleClass('hide');
 	clearInterval(countDownTimer);
-}
+};
+
+function computerMove() {
+	if (isBoardFull() ) {
+		console.log("game's over idiot");
+		return};
+
+		$('#player1').html("X, your turn").css("visibility", "hidden");
+		$('#player2').html("Computer is thinking").css("visibility", "visible");
+
+	var square = Math.floor(Math.random() * 9 );
+	//make sure square is not taken
+	if ($('td').eq(square).html() === ""){
+		setTimeout(function() {
+			$('td').eq(square).html("O").css("background-color", "white");
+			$('#player1').html("Your turn").css("visibility", "visible");
+			$('#player2').html("O, your turn").css("visibility", "hidden");
+			if (checkWin()) {
+				$('#result').removeClass('hide').html('The computer won!');
+			};
+		}, 1000);
+	} else computerMove();
+};
 
 // actions to be taken when a square is selected
 $('#board td').on( {
@@ -192,7 +228,11 @@ $('#board td').on( {
 		if ($(this).html() === "" && !checkWin() ){
 
 			//set the new piece
-			setPiece(this, checkCurrentPlayer);
+			if(vsComputer) {
+				setPiece(this, player1);
+			} else {
+				setPiece(this, checkCurrentPlayer);
+			}
 
 			//return if the game is now over or tied after setting the new piece
 			won = checkWin();
@@ -227,7 +267,10 @@ $('#board td').on( {
 		//reset the background color
 		if (!won ) {
 			$(this).css("background-color", "white");
-		}
+		};
+
+		//if playing vsComputer, make the computer's move
+		if (vsComputer) {computerMove()};
 	},
 	mouseenter: function() {
 		if (won !== true) {
@@ -246,28 +289,35 @@ $('#board td').on( {
 // BUTTONS
 $('#regularGame').on('click', function() {
 	speedGame = false;
-	blindGame = false;
+	vsComputer = false;
 	clearBoard();
 	showButtons();
 })
 
 $('#speedGame').on('click', function() {
 	speedGame = true;
-	blindGame = false;
+	vsComputer = false;
 	clearBoard();
 	showButtons();
 });
-$('#blindGame').on('click', function() {
+$('#vsComputer').on('click', function() {
 	speedGame = false;
-	blindGame = true;
+	vsComputer = true;
 	clearBoard();
+	showButtons();
+	currentPlayerCount = 1;
+	checkCurrentPlayer();
+	showPlayerTurn();
+
 });
+
 
 $('#clearBoard').on('click', clearBoard);
 $('#mainMenuButton').on('click', showButtons);
 $('#resumeGame').on('click', function() {
 	showButtons();
 });
+
 
 
 $(document).ready(function() {
