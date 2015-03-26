@@ -78,7 +78,9 @@ function countDown() {
 		$('#result').html(seconds);
 		seconds--;
 	} else {
-		$('#result').html("Too Slow!")
+		$('#result').html("Too Slow!");
+		changeMove();
+		seconds = 5;
 	}
 }
 
@@ -177,16 +179,18 @@ $('#board td').on( {
 			if (checkWin()) {updateScoreBoard()};
 			checkTie();
 
-			//clear any old timer
-			if(countDownTimer >= 1) {
+			//clear timer if one is already running
+			if(countDownTimer >= 1 ) {
 				clearInterval(countDownTimer);
 			}
-			//set new interval for countdown timer
+			//set new interval for countdown timer if game is still going
+
+			if (!checkWin()) {
 				seconds = 5;
 				//call once to fire immediately
 				countDown();
 				countDownTimer = setInterval(countDown, 1000);
-
+			};
 		};
 		//make the background white
 		if (!checkWin() ) {
