@@ -1,48 +1,13 @@
-// ################## GLOBAL VARIABLES ############################
-
-
-//game types
-var gameMode = "regular";
-
-var player1 = "X";
-var player2 = "O";
-var won = false;
-
-//speedGame stuff
-var timeLimit = 3;
-var countDownTimer;
-
-//load stuff from localStorage if it exists, otherwise set to 0
-var currentPlayerCount = (localStorage.getItem('currentPlayerCount'))? JSON.parse(localStorage.getItem('currentPlayerCount')) : 0;
-var currentPlayer = (localStorage.getItem('currentPlayer'))? JSON.parse(localStorage.getItem('currentPlayer')) : 0;
-var player1Wins = (localStorage.getItem('player1Wins'))? JSON.parse(localStorage.getItem('player1Wins')) : 0;
-var player2Wins = (localStorage.getItem('player2Wins'))? JSON.parse(localStorage.getItem('player2Wins')) : 0;
-
-var board = [
-	[$('td').eq(0), $('td').eq(1),$('td').eq(2)],
-	[$('td').eq(3), $('td').eq(4),$('td').eq(5)],
-	[$('td').eq(6), $('td').eq(7),$('td').eq(8)],
-];
-
-var winningCombos = [
-	//rows
-	[$('td').eq(0), $('td').eq(1),$('td').eq(2)],
-	[$('td').eq(3), $('td').eq(4),$('td').eq(5)],
-	[$('td').eq(6), $('td').eq(7),$('td').eq(8)],
-
-	//columns
-	[$('td').eq(0), $('td').eq(3),$('td').eq(6)],
-	[$('td').eq(1), $('td').eq(4),$('td').eq(7)],
-	[$('td').eq(2), $('td').eq(5),$('td').eq(8)],
-
-	//diagonals
-	[$('td').eq(0), $('td').eq(4),$('td').eq(8)],
-	[$('td').eq(6), $('td').eq(4),$('td').eq(2)]
-];
-
-
-
-
+/*  TABLE OF CONTENTS
+		1. Board Stuff
+		2. Buttons
+		3. Display Stuff
+		4. Game Logic
+		5. Global Variables
+		6. Local Storage
+		7. Moves
+		8. Window Load
+*/
 
 
 // ################## BOARD STUFF ###############################
@@ -150,43 +115,6 @@ $('#rotate').on('click', function() {
 });
 
 
-
-
-
-// ################## GAME LOGIC #########################
-
-function checkWin() {
-	for(var i = 0; i < winningCombos.length; i++) {
-
-		// check each winning combo
-		if (winningCombos[i][0].html() == winningCombos[i][1].html() && winningCombos[i][0].html() == winningCombos[i][2].html() ) {
-
-			// someone has won, but make sure it's not 3 blanks
-			if(winningCombos[i][0].html() !== "") {
-				//change color of winning squares
-				winningCombos[i][0].css("background-color", "rgb(55, 247, 184)");
-				winningCombos[i][1].css("background-color", "rgb(55, 247, 184)");
-				winningCombos[i][2].css("background-color", "rgb(55, 247, 184)");
-				$('#player1').css("visibility", "hidden");
-				$('#player2').css("visibility", "hidden");
-				return true};
-		};
-	};
-};
-
-function checkTie() {
-		// if each row is full and no one has won
-		if (isBoardFull() && !checkWin()) {
-			$('#player1').css("visibility", "hidden");
-			$('#player2').css("visibility", "hidden");
-			return true;
-		};
-};
-
-
-
-
-
 // ##################### DISPLAY STUFF ################################
 
 function countDown() {
@@ -231,6 +159,86 @@ function updateScoreBoard() {
 	$('#player2Wins p').html(player2Wins);
 };
 
+
+
+// ################## GAME LOGIC #########################
+
+function checkWin() {
+	for(var i = 0; i < winningCombos.length; i++) {
+
+		// check each winning combo
+		if (winningCombos[i][0].html() == winningCombos[i][1].html() && winningCombos[i][0].html() == winningCombos[i][2].html() ) {
+
+			// someone has won, but make sure it's not 3 blanks
+			if(winningCombos[i][0].html() !== "") {
+				//change color of winning squares
+				winningCombos[i][0].css("background-color", "rgb(55, 247, 184)");
+				winningCombos[i][1].css("background-color", "rgb(55, 247, 184)");
+				winningCombos[i][2].css("background-color", "rgb(55, 247, 184)");
+				$('#player1').css("visibility", "hidden");
+				$('#player2').css("visibility", "hidden");
+				return true};
+		};
+	};
+};
+
+function checkTie() {
+		// if each row is full and no one has won
+		if (isBoardFull() && !checkWin()) {
+			$('#player1').css("visibility", "hidden");
+			$('#player2').css("visibility", "hidden");
+			return true;
+		};
+};
+
+function checkCurrentPlayer() {
+	currentPlayer = (currentPlayerCount%2 === 0)? player1 : player2;
+	return currentPlayer;
+};
+
+
+
+
+// ################## GLOBAL VARIABLES ############################
+
+//game types
+var gameMode = "regular";
+
+var player1 = "X";
+var player2 = "O";
+var won = false;
+
+//speedGame stuff
+var timeLimit = 3;
+var countDownTimer;
+
+//load stuff from localStorage if it exists, otherwise set to 0
+var currentPlayerCount = (localStorage.getItem('currentPlayerCount'))? JSON.parse(localStorage.getItem('currentPlayerCount')) : 0;
+var currentPlayer = (localStorage.getItem('currentPlayer'))? JSON.parse(localStorage.getItem('currentPlayer')) : 0;
+var player1Wins = (localStorage.getItem('player1Wins'))? JSON.parse(localStorage.getItem('player1Wins')) : 0;
+var player2Wins = (localStorage.getItem('player2Wins'))? JSON.parse(localStorage.getItem('player2Wins')) : 0;
+
+var board = [
+	[$('td').eq(0), $('td').eq(1),$('td').eq(2)],
+	[$('td').eq(3), $('td').eq(4),$('td').eq(5)],
+	[$('td').eq(6), $('td').eq(7),$('td').eq(8)],
+];
+
+var winningCombos = [
+	//rows
+	[$('td').eq(0), $('td').eq(1),$('td').eq(2)],
+	[$('td').eq(3), $('td').eq(4),$('td').eq(5)],
+	[$('td').eq(6), $('td').eq(7),$('td').eq(8)],
+
+	//columns
+	[$('td').eq(0), $('td').eq(3),$('td').eq(6)],
+	[$('td').eq(1), $('td').eq(4),$('td').eq(7)],
+	[$('td').eq(2), $('td').eq(5),$('td').eq(8)],
+
+	//diagonals
+	[$('td').eq(0), $('td').eq(4),$('td').eq(8)],
+	[$('td').eq(6), $('td').eq(4),$('td').eq(2)]
+];
 
 
 
@@ -303,8 +311,6 @@ function setPiece(square, currentPlayer) {
 	saveGame();
 };
 
-
-
 // actions to be taken when a square is selected
 $('#board td').on( {
  	click: function() {
@@ -372,6 +378,9 @@ $('#board td').on( {
 
 
 
+
+
+// ####################### WINDOW LOAD #############################
 
 $(document).ready(function() {
 	//create player wins totals in localStorage if it doesn't already exist
