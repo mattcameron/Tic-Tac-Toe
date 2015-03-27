@@ -137,7 +137,7 @@ function showButtons() {
 
 function showPlayerTurn() {
 	//update the display to show whose turn it is
-	if (currentPlayer === player1) {
+	if (checkCurrentPlayer() === player1) {
 		$('#player1').css("visibility", "hidden");
 		$('#player2').css("visibility", "visible");
 	} else {
@@ -214,7 +214,7 @@ var countDownTimer;
 
 //load stuff from localStorage if it exists, otherwise set to 0
 var currentPlayerCount = (localStorage.getItem('currentPlayerCount'))? JSON.parse(localStorage.getItem('currentPlayerCount')) : 0;
-var currentPlayer = (localStorage.getItem('currentPlayer'))? JSON.parse(localStorage.getItem('currentPlayer')) : 0;
+var currentPlayer; // = (localStorage.getItem('currentPlayer'))? JSON.parse(localStorage.getItem('currentPlayer')) : 0;
 var player1Wins = (localStorage.getItem('player1Wins'))? JSON.parse(localStorage.getItem('player1Wins')) : 0;
 var player2Wins = (localStorage.getItem('player2Wins'))? JSON.parse(localStorage.getItem('player2Wins')) : 0;
 
