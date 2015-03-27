@@ -1,7 +1,5 @@
 //game types
-var speedGame;
-var blindGame;
-var vsComputer;
+var gameMode = "regular";   //(localStorage.getItem('gameMode')) ? JSON.parse(localStorage.getItem('gameMode')) : "regular";
 
 var player1 = "X";
 var player2 = "O";
@@ -12,10 +10,10 @@ var timeLimit = 3;
 var countDownTimer;
 
 //load stuff from localStorage if it exists, otherwise set to 0
-var currentPlayerCount = JSON.parse(localStorage.getItem('currentPlayerCount') || 0);
-var currentPlayer = JSON.parse(localStorage.getItem('currentPlayer') || 0);
-var player1Wins = JSON.parse(localStorage.getItem('player1Wins') || 0);
-var player2Wins = JSON.parse(localStorage.getItem('player2Wins') || 0);
+var currentPlayerCount = (localStorage.getItem('currentPlayerCount'))? JSON.parse(localStorage.getItem('currentPlayerCount')) : 0;
+var currentPlayer = (localStorage.getItem('currentPlayer'))? JSON.parse(localStorage.getItem('currentPlayer')) : 0;
+var player1Wins = (localStorage.getItem('player1Wins'))? JSON.parse(localStorage.getItem('player1Wins')) : 0;
+var player2Wins = (localStorage.getItem('player2Wins'))? JSON.parse(localStorage.getItem('player2Wins')) : 0;
 
 var board = [
 	[$('td').eq(0), $('td').eq(1),$('td').eq(2)],
@@ -123,8 +121,8 @@ function updateScoreBoard() {
 	(currentPlayer === player1)? player1Wins++ : player2Wins++;
 
 	//save the new scores to localStorage
-	localStorage.setItem('player1Wins', player1Wins);
-	localStorage.setItem('player2Wins', player2Wins);
+	localStorage.setItem( JSON.stringify('player1Wins', player1Wins));
+	localStorage.setItem(JSON.stringify('player2Wins', player2Wins));
 
 	// display the new score
 	$('#player1Wins p').html(player1Wins);
@@ -288,30 +286,27 @@ $('#board td').on( {
 
 // BUTTONS
 $('#regularGame').on('click', function() {
-	speedGame = false;
-	vsComputer = false;
+	gameMode = "regular";
 	//store this in localStorage
-	localStorage.setItem('speedGame', false);
-	localStorage.setItem('vsComputer', false);
+	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
 
 	clearBoard();
 	showButtons();
 });
 
 $('#speedGame').on('click', function() {
-	speedGame = true;
-	vsComputer = false;
+	gameMode = "speedGame";
 	//store this in localStorage
-	localStorage.setItem('speedGame', true);
-	localStorage.setItem('vsComputer', false);
+	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
+
 	clearBoard();
 	showButtons();
 });
 $('#vsComputer').on('click', function() {
-	speedGame = false;
-	vsComputer = true;
-	localStorage.setItem('speedGame', false);
-	localStorage.setItem('vsComputer', true);
+	gameMode = "vsComputer";
+	//store this in localStorage
+	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
+
 	clearBoard();
 	showButtons();
 	currentPlayerCount = 1;
@@ -329,8 +324,8 @@ $('#resumeGame').on('click', function() {
 
 $(document).ready(function() {
 	//create player wins totals in localStorage if it doesn't already exist
-	if (!localStorage.getItem('player1Wins')) { localStorage.setItem('player1Wins', 0) };
-	if (!localStorage.getItem('player2Wins')) { localStorage.setItem('player2Wins', 0) };
+	if (!localStorage.getItem('player1Wins')) { localStorage.setItem(JSON.stringify('player1Wins', 0)) };
+	if (!localStorage.getItem('player2Wins')) { localStorage.setItem(JSON.stringify('player2Wins', 0)) };
 
 	//set score tally
 	$('#player1Wins p').html(JSON.parse(localStorage.getItem('player1Wins') ));
@@ -346,8 +341,7 @@ $(document).ready(function() {
 					board[row][sq].css("background-color", "white");
 				};
 			};
-			speedGame = JSON.parse(localStorage.getItem('speedGame'));
-			vsComputer = JSON.parse(localStorage.getItem('vsComputer'));
+			gameMode = JSON.parse(localStorage.getItem('gameMode'));
 		};
 		// also reset the board if the last game was over
 		if ( checkWin() || checkTie() || isBoardBlank()) {
