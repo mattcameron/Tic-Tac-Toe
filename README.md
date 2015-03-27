@@ -52,6 +52,10 @@ Once a game is over, you can wipe the board clean and start a new game.
 
 *Pro-tip:* You can also use this if you are a bad loser, and your chances of winning aren't looking good. ;)
 
+### James' Bonus Bonus Bonus
+
+If you ignore the warning and click the button in the bottom right hand corner, well... don't blame me.
+
 __________________
 
 
