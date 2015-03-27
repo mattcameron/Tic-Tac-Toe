@@ -121,8 +121,8 @@ function updateScoreBoard() {
 	(currentPlayer === player1)? player1Wins++ : player2Wins++;
 
 	//save the new scores to localStorage
-	localStorage.setItem( JSON.stringify('player1Wins', player1Wins));
-	localStorage.setItem(JSON.stringify('player2Wins', player2Wins));
+	localStorage.setItem('player1Wins', JSON.stringify(player1Wins));
+	localStorage.setItem('player2Wins', JSON.stringify(player2Wins));
 
 	// display the new score
 	$('#player1Wins p').html(player1Wins);
@@ -215,6 +215,7 @@ function computerMove() {
 			if (checkWin()) {
 				$('#result').removeClass('hide').html('The computer won!');
 			};
+			saveGame();
 		}, 1000);
 	} else computerMove();
 };
@@ -226,7 +227,7 @@ $('#board td').on( {
 		if ($(this).html() === "" && !checkWin() ){
 
 			//set the new piece
-			if(vsComputer === true) {
+			if(gameMode === "vsComputer") {
 				setPiece(this, player1);
 			} else {
 				setPiece(this, checkCurrentPlayer);
@@ -248,7 +249,7 @@ $('#board td').on( {
 			}
 
 			//start timer if it's a speedGame
-			if (speedGame === true) {
+			if (gameMode === "speedGame") {
 				//clear timer first if one is already running
 				if(countDownTimer >= 1 ) {
 					clearInterval(countDownTimer);
@@ -268,7 +269,7 @@ $('#board td').on( {
 		};
 
 		//if playing vsComputer, make the computer's move
-		if (vsComputer === true) {computerMove()};
+		if (gameMode === "vsComputer") {computerMove()};
 	},
 	mouseenter: function() {
 		if (checkWin() !== true) {
@@ -324,8 +325,8 @@ $('#resumeGame').on('click', function() {
 
 $(document).ready(function() {
 	//create player wins totals in localStorage if it doesn't already exist
-	if (!localStorage.getItem('player1Wins')) { localStorage.setItem(JSON.stringify('player1Wins', 0)) };
-	if (!localStorage.getItem('player2Wins')) { localStorage.setItem(JSON.stringify('player2Wins', 0)) };
+	if (!localStorage.getItem('player1Wins')) { localStorage.setItem('player1Wins', JSON.stringify(0)) };
+	if (!localStorage.getItem('player2Wins')) { localStorage.setItem('player2Wins', JSON.stringify(0)) };
 
 	//set score tally
 	$('#player1Wins p').html(JSON.parse(localStorage.getItem('player1Wins') ));
