@@ -211,3 +211,44 @@ hr {
   -webkit-transform: translate(0px,5px);
 	border-bottom: 1px solid;
 }
+
+
+
+/*#################### Page Spin ######################*/
+
+#rotate {
+	position: fixed;
+	right: 10px;
+	bottom: 10px;
+	background-color: transparent;
+	color: white;
+}
+
+.rotate {
+	-webkit-animation:anime 4s infinite;
+  -webkit-animation-timing-function: linear;
+}
+
+@keyframes anime{
+  0% {transform: rotateZ(0deg); background-color:#00ff00;}
+  24%{background-color:#00ff00;}
+  25%{background-color:#ff00ff;}
+  49%{background-color:#ff00ff;}
+  50%{background-color:#ffff00;}
+  74%{background-color:#ffff00;}
+  75%{background-color:#00ffff;}
+  100%{transform: rotateZ(360deg); background-color:#00ffff;}
+
+}
+
+@-webkit-keyframes anime{
+  0% {-webkit-transform: rotateZ(0deg); background-color:#00ff00;}
+  24%{background-color:#00ff00;}
+  25%{background-color:#ff00ff;}
+  49%{background-color:#ff00ff;}
+  50%{background-color:#ffff00;}
+  74%{background-color:#ffff00;}
+  75%{background-color:#00ffff;}
+  100%{-webkit-transform: rotateZ(360deg); background-color:#00ffff;}
+
+}

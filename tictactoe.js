@@ -322,6 +322,15 @@ $('#resumeGame').on('click', function() {
 	showButtons();
 });
 
+// spin screen
+$('#rotate').on('click', function() {
+	$('html').addClass('rotate');
+	$('body').css({
+		'background-image': 'none',
+		'background-color': 'transparent'});
+	$('audio')[0].play();
+});
+
 
 $(document).ready(function() {
 	//create player wins totals in localStorage if it doesn't already exist
