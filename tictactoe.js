@@ -1,5 +1,8 @@
+// ################## GLOBAL VARIABLES ############################
+
+
 //game types
-var gameMode = "regular";   //(localStorage.getItem('gameMode')) ? JSON.parse(localStorage.getItem('gameMode')) : "regular";
+var gameMode = "regular";
 
 var player1 = "X";
 var player2 = "O";
@@ -37,56 +40,120 @@ var winningCombos = [
 	[$('td').eq(6), $('td').eq(4),$('td').eq(2)]
 ];
 
-function saveGame() {
-	// get the current board with pieces
-	var game = [
-		[ board[0][0].html(), board[0][1].html(), board[0][2].html() ],
-		[ board[1][0].html(), board[1][1].html(), board[1][2].html() ],
-		[ board[2][0].html(), board[2][1].html(), board[2][2].html() ]
-	];
 
-	//save the board to localStorage
-	localStorage.setItem('board', JSON.stringify(game));
 
-	//save the currentPlayerCount so the correct person starts on load
-	localStorage.setItem('currentPlayerCount', JSON.stringify(currentPlayerCount) );
 
-	//save currentPlayer
-	localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer))
-};
 
-function checkCurrentPlayer() {
-	currentPlayer = (currentPlayerCount%2 === 0)? player1 : player2;
-	return currentPlayer;
-}
 
-function setPiece(square, currentPlayer) {
-	//place the new piece
-	$(square).html(currentPlayer);
+// ################## BOARD STUFF ###############################
 
-	//Change the player turn
-	changeMove();
 
-	//save the board to localStorage
-	saveGame();
-};
+function clearBoard() {
+	//set every square back to ""
+	$.each(board, function(index, row) {
+			row[0].css("background-color","rgba(255, 255, 255,0.6)").html("");
+			row[1].css("background-color","rgba(255, 255, 255,0.6)").html("");
+			row[2].css("background-color","rgba(255, 255, 255,0.6)").html("");
+		});
 
-function changeMove() {
-	checkCurrentPlayer();
-	currentPlayerCount++;
-	showPlayerTurn();
-};
+	//reset Game Over message
+	$("#result").addClass('hide').html("");
 
-function countDown() {
-	if (timeLimit > 0) {
-		$('#result').removeClass('hide').html(timeLimit);
-		timeLimit--;
-	} else {
-		$('#result').removeClass('hide').html("Too Slow!");
-		changeMove();
-		timeLimit = 3;
+	//clear the countdown if it's running
+	clearInterval(countDownTimer);
+
+	//save the cleared board to localStorage
+		saveGame();
+
+	//if vs computer, reset to player 1's turn
+	if(vsComputer) {
+		currentPlayerCount = 1;
+		checkCurrentPlayer();
+		showPlayerTurn();
 	}
-}
+};
+
+function isBoardBlank() {
+	var count = 0;
+	$.each(board, function(index, row) {
+			if (row[0].html() !== "") {count++};
+			if (row[1].html() !== "") {count++};
+			if (row[2].html() !== "") {count++};
+		});
+	return (count === 0)? true : false;
+};
+
+function isBoardFull() {
+	var count = 0;
+		//check each row
+		$.each(board, function(index, row) {
+			//see if any squares in that row are blank
+			if (row[0].html() !== "" && row[1].html() !== "" && row[2].html() !== ""){
+				count++;
+			};
+		});
+
+		if (count === 3) {
+			return true;
+		};
+};
+
+
+
+
+
+// ######################### BUTTONS ###################################
+
+$('#regularGame').on('click', function() {
+	gameMode = "regular";
+	//store this in localStorage
+	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
+
+	clearBoard();
+	showButtons();
+});
+
+$('#speedGame').on('click', function() {
+	gameMode = "speedGame";
+	//store this in localStorage
+	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
+
+	clearBoard();
+	showButtons();
+});
+$('#vsComputer').on('click', function() {
+	gameMode = "vsComputer";
+	//store this in localStorage
+	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
+
+	clearBoard();
+	showButtons();
+	currentPlayerCount = 1;
+	checkCurrentPlayer();
+	showPlayerTurn();
+
+});
+
+$('#clearBoard').on('click', clearBoard);
+$('#mainMenuButton').on('click', showButtons);
+$('#resumeGame').on('click', function() {
+	showButtons();
+});
+
+// spin screen
+$('#rotate').on('click', function() {
+	$('html').addClass('rotate');
+	$('body').css({
+		'background-image': 'none',
+		'background-color': 'transparent'});
+	$('audio')[0].play();
+});
+
+
+
+
+
+// ################## GAME LOGIC #########################
 
 function checkWin() {
 	for(var i = 0; i < winningCombos.length; i++) {
@@ -116,6 +183,41 @@ function checkTie() {
 		};
 };
 
+
+
+
+
+// ##################### DISPLAY STUFF ################################
+
+function countDown() {
+	if (timeLimit > 0) {
+		$('#result').removeClass('hide').html(timeLimit);
+		timeLimit--;
+	} else {
+		$('#result').removeClass('hide').html("Too Slow!");
+		changeMove();
+		timeLimit = 3;
+	};
+};
+
+function showButtons() {
+	$('#mainMenuButton').toggleClass('hide');
+	$('#clearBoard').toggleClass('hide');
+	$('#mainMenu').toggleClass('hide');
+	clearInterval(countDownTimer);
+};
+
+function showPlayerTurn() {
+	//update the display to show whose turn it is
+	if (currentPlayer === player1) {
+		$('#player1').css("visibility", "hidden");
+		$('#player2').css("visibility", "visible");
+	} else {
+		$('#player1').css("visibility", "visible");
+		$('#player2').css("visibility", "hidden");
+	};
+};
+
 function updateScoreBoard() {
 	//add win to the scoreboard
 	(currentPlayer === player1)? player1Wins++ : player2Wins++;
@@ -127,74 +229,44 @@ function updateScoreBoard() {
 	// display the new score
 	$('#player1Wins p').html(player1Wins);
 	$('#player2Wins p').html(player2Wins);
-}
-
-function showPlayerTurn() {
-	//update the display to show whose turn it is
-	if (currentPlayer === player1) {
-		$('#player1').css("visibility", "hidden");
-		$('#player2').css("visibility", "visible");
-	} else {
-		$('#player1').css("visibility", "visible");
-		$('#player2').css("visibility", "hidden");
-	}
-}
-
-function clearBoard() {
-	//set every square back to ""
-	$.each(board, function(index, row) {
-			row[0].css("background-color","rgba(255, 255, 255,0.6)").html("");
-			row[1].css("background-color","rgba(255, 255, 255,0.6)").html("");
-			row[2].css("background-color","rgba(255, 255, 255,0.6)").html("");
-		});
-
-	//reset Game Over message
-	$("#result").addClass('hide').html("");
-
-	//clear the countdown if it's running
-	clearInterval(countDownTimer);
-
-	//save the cleared board to localStorage
-		saveGame();
-
-	//if vs computer, reset to player 1's turn
-	if(vsComputer) {
-		currentPlayerCount = 1;
-		checkCurrentPlayer();
-		showPlayerTurn();
-	}
-}
-
-function isBoardBlank() {
-	var count = 0;
-	$.each(board, function(index, row) {
-			if (row[0].html() !== "") {count++};
-			if (row[1].html() !== "") {count++};
-			if (row[2].html() !== "") {count++};
-		});
-	return (count === 0)? true : false;
 };
 
-function isBoardFull() {
-	var count = 0;
-		//check each row
-		$.each(board, function(index, row) {
-			//see if any squares in that row are blank
-			if (row[0].html() !== "" && row[1].html() !== "" && row[2].html() !== ""){
-				count++;
-			};
-		});
 
-		if (count === 3) {
-			return true;
-		};
+
+
+
+
+// ################## LOCAL STORAGE #########################
+
+function saveGame() {
+	// get the current board with pieces
+	var game = [
+		[ board[0][0].html(), board[0][1].html(), board[0][2].html() ],
+		[ board[1][0].html(), board[1][1].html(), board[1][2].html() ],
+		[ board[2][0].html(), board[2][1].html(), board[2][2].html() ]
+	];
+
+	//save the board to localStorage
+	localStorage.setItem('board', JSON.stringify(game));
+
+	//save the currentPlayerCount so the correct person starts on load
+	localStorage.setItem('currentPlayerCount', JSON.stringify(currentPlayerCount) );
+
+	//save currentPlayer
+	localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer))
 };
 
-function showButtons() {
-	$('#mainMenuButton').toggleClass('hide');
-	$('#clearBoard').toggleClass('hide');
-	$('#mainMenu').toggleClass('hide');
-	clearInterval(countDownTimer);
+
+
+
+
+
+// ######################## MOVES ##################################
+
+function changeMove() {
+	checkCurrentPlayer();
+	currentPlayerCount++;
+	showPlayerTurn();
 };
 
 function computerMove() {
@@ -219,6 +291,19 @@ function computerMove() {
 		}, 1000);
 	} else computerMove();
 };
+
+function setPiece(square, currentPlayer) {
+	//place the new piece
+	$(square).html(currentPlayer);
+
+	//Change the player turn
+	changeMove();
+
+	//save the board to localStorage
+	saveGame();
+};
+
+
 
 // actions to be taken when a square is selected
 $('#board td').on( {
@@ -285,51 +370,7 @@ $('#board td').on( {
 	}
 });
 
-// BUTTONS
-$('#regularGame').on('click', function() {
-	gameMode = "regular";
-	//store this in localStorage
-	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
 
-	clearBoard();
-	showButtons();
-});
-
-$('#speedGame').on('click', function() {
-	gameMode = "speedGame";
-	//store this in localStorage
-	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
-
-	clearBoard();
-	showButtons();
-});
-$('#vsComputer').on('click', function() {
-	gameMode = "vsComputer";
-	//store this in localStorage
-	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
-
-	clearBoard();
-	showButtons();
-	currentPlayerCount = 1;
-	checkCurrentPlayer();
-	showPlayerTurn();
-
-});
-
-$('#clearBoard').on('click', clearBoard);
-$('#mainMenuButton').on('click', showButtons);
-$('#resumeGame').on('click', function() {
-	showButtons();
-});
-
-// spin screen
-$('#rotate').on('click', function() {
-	$('html').addClass('rotate');
-	$('body').css({
-		'background-image': 'none',
-		'background-color': 'transparent'});
-	$('audio')[0].play();
-});
 
 
 $(document).ready(function() {
