@@ -15,25 +15,29 @@
 
 function clearBoard() {
 	//set every square back to ""
-	// $.each(board, function(index, row) {
-	// 		row[0].css("background-color","rgba(255, 255, 255,0.6)").html("");
-	// 		row[1].css("background-color","rgba(255, 255, 255,0.6)").html("");
-	// 		row[2].css("background-color","rgba(255, 255, 255,0.6)").html("");
-	// 	});
+	$.each(board, function(index, row) {
+			row[0].css("background-color","rgba(255, 255, 255,0.6)").html("");
+			row[1].css("background-color","rgba(255, 255, 255,0.6)").html("");
+			row[2].css("background-color","rgba(255, 255, 255,0.6)").html("");
+		});
 
-	// //reset Game Over message
-	// $("#result").addClass('hide').html("");
+	//reset Game Over message
+	$("#result").addClass('hide').html("");
 
-	// //clear the countdown if it's running
-	// clearInterval(countDownTimer);
+	//save board to localStorage
+	saveGame();
 
-	// //if vs computer, reset to player 1's turn
-	// if(gameMode === "vsComputer") {
-	// 	currentPlayerCount = 1;
-	// 	checkCurrentPlayer();
-	// 	showPlayerTurn();
-	// 	console.log("hello");
-	// };
+	//clear the countdown if it's running
+	clearInterval(countDownTimer);
+
+	//if vs computer, reset to player 1's turn
+	if(gameMode === "vsComputer") {
+		currentPlayerCount = 0;
+		checkCurrentPlayer();
+		showPlayerTurn();
+	};
+
+	showPlayerTurn();
 };
 
 function isBoardBlank() {
@@ -98,13 +102,14 @@ $('#vsComputer').on('click', function() {
 
 	clearBoard();
 	showButtons();
-	currentPlayerCount = 1;
+	currentPlayerCount = 0;
 	checkCurrentPlayer();
 	showPlayerTurn();
 
 });
 
 $('#clearBoard').on('click', clearBoard);
+
 $('#mainMenuButton').on('click', showButtons);
 $('#resumeGame').on('click', function() {
 	showButtons();
@@ -266,7 +271,7 @@ function saveGame() {
 	localStorage.setItem('currentPlayerCount', JSON.stringify(currentPlayerCount) );
 
 	//save currentPlayer
-	localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer))
+	localStorage.setItem('currentPlayer', JSON.stringify(currentPlayer));
 };
 
 

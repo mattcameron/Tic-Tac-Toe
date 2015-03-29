@@ -59,7 +59,7 @@ hr {
 	float:left;
 	color: black;
 	padding: 30px;
-	margin-left: 250px;
+	margin-left: 200px;
 	background-color: white;
 	border-radius: 10px;
 	visibility: hidden;
@@ -69,7 +69,7 @@ hr {
 	float: right;
 	color: black;
 	padding: 30px;
-	margin-right: 250px;
+	margin-right: 200px;
 	background-color: white;
 	border-radius: 10px;
 	visibility: hidden;
