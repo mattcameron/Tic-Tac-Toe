@@ -42,7 +42,7 @@ Every time a game is won, the scoreboard is updated, so that you can keep count 
 
 ### Resume Game Option
 
-If you abandon a half-finished game (either because your is stuck in a tree, or you accidentally navigate away), when you reload the game, you will be given the option to resume your previous game.
+If you abandon a half-finished game (either because your cat is stuck in a tree, or you accidentally navigate away), when you reload the game, you will be given the option to resume your previous game.
 
 Alternatively, you can simply start a new game as per usual.
 
