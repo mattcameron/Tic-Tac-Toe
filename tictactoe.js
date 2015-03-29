@@ -15,27 +15,25 @@
 
 function clearBoard() {
 	//set every square back to ""
-	$.each(board, function(index, row) {
-			row[0].css("background-color","rgba(255, 255, 255,0.6)").html("");
-			row[1].css("background-color","rgba(255, 255, 255,0.6)").html("");
-			row[2].css("background-color","rgba(255, 255, 255,0.6)").html("");
-		});
+	// $.each(board, function(index, row) {
+	// 		row[0].css("background-color","rgba(255, 255, 255,0.6)").html("");
+	// 		row[1].css("background-color","rgba(255, 255, 255,0.6)").html("");
+	// 		row[2].css("background-color","rgba(255, 255, 255,0.6)").html("");
+	// 	});
 
-	//reset Game Over message
-	$("#result").addClass('hide').html("");
+	// //reset Game Over message
+	// $("#result").addClass('hide').html("");
 
-	//clear the countdown if it's running
-	clearInterval(countDownTimer);
+	// //clear the countdown if it's running
+	// clearInterval(countDownTimer);
 
-	//save the cleared board to localStorage
-		saveGame();
-
-	//if vs computer, reset to player 1's turn
-	if(vsComputer) {
-		currentPlayerCount = 1;
-		checkCurrentPlayer();
-		showPlayerTurn();
-	}
+	// //if vs computer, reset to player 1's turn
+	// if(gameMode === "vsComputer") {
+	// 	currentPlayerCount = 1;
+	// 	checkCurrentPlayer();
+	// 	showPlayerTurn();
+	// 	console.log("hello");
+	// };
 };
 
 function isBoardBlank() {
@@ -76,15 +74,22 @@ $('#regularGame').on('click', function() {
 
 	clearBoard();
 	showButtons();
+	currentPlayerCount = 0;
+	checkCurrentPlayer();
+	showPlayerTurn();
+
+
 });
 
 $('#speedGame').on('click', function() {
 	gameMode = "speedGame";
 	//store this in localStorage
 	localStorage.setItem('gameMode', JSON.stringify(gameMode) );
-
 	clearBoard();
 	showButtons();
+	currentPlayerCount = 0;
+	checkCurrentPlayer();
+	showPlayerTurn();
 });
 $('#vsComputer').on('click', function() {
 	gameMode = "vsComputer";
@@ -138,11 +143,11 @@ function showButtons() {
 function showPlayerTurn() {
 	//update the display to show whose turn it is
 	if (checkCurrentPlayer() === player1) {
-		$('#player1').css("visibility", "hidden");
-		$('#player2').css("visibility", "visible");
-	} else {
 		$('#player1').css("visibility", "visible");
 		$('#player2').css("visibility", "hidden");
+	} else {
+		$('#player1').css("visibility", "hidden");
+		$('#player2').css("visibility", "visible");
 	};
 };
 
@@ -214,7 +219,7 @@ var countDownTimer;
 
 //load stuff from localStorage if it exists, otherwise set to 0
 var currentPlayerCount = (localStorage.getItem('currentPlayerCount'))? JSON.parse(localStorage.getItem('currentPlayerCount')) : 0;
-var currentPlayer; // = (localStorage.getItem('currentPlayer'))? JSON.parse(localStorage.getItem('currentPlayer')) : 0;
+var currentPlayer = checkCurrentPlayer();
 var player1Wins = (localStorage.getItem('player1Wins'))? JSON.parse(localStorage.getItem('player1Wins')) : 0;
 var player2Wins = (localStorage.getItem('player2Wins'))? JSON.parse(localStorage.getItem('player2Wins')) : 0;
 
